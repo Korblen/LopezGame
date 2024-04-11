@@ -342,6 +342,13 @@ class Character {
       }
       console.log("La partie est terminée.");
     }
+    startGame() {
+      this.chooseCharacter(); // Permet au joueur de choisir son personnage
+      while (this.turnLeft > 0) {
+        this.startTurn();
+      }
+    }
+  
   
     
   }
