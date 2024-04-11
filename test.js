@@ -211,45 +211,34 @@ class Character {
   // Step 3: Create Game class ################################################################
   class Game {
     constructor() {
-      this.turnLeft = 10;
-      // Initialisez ici vos personnages
-      this.characters = [
-        new Fighter("LOPEZ Joe"),
-        new Paladin("HOFFMAN de ces morts"),
-        new Monk("DONOVAN le tuberculé"),
-        new Berzerker("CERBERUS fend'l'anus"),
-        new Assassin("CARL le skin"),
-        new Wizard("PROSPERE le purineur"),
-        new Thief("HENOCK Cortes"),
-      ];
-      this.playerCharacter = null; // Ajout pour stocker le personnage du joueur
+        this.turnLeft = 10;
+        // Initialisez ici vos personnages
+        this.characters = [
+            new Fighter("LOPEZ Joe"),
+            new Paladin("HOFFMAN de ces morts"),
+            new Monk("DONOVAN le tuberculé"),
+            new Berzerker("CERBERUS fend'l'anus"),
+            new Assassin("CARL le skin"),
+            new Wizard("PROSPERE le purineur"),
+            new Thief("HENOCK Cortes"),
+        ];
+        this.playerCharacter = this.getCharacterFromURL(); // Initialise le personnage du joueur en fonction de l'URL
     }
-  
-    // Méthode pour choisir un combattant
-    chooseCharacter() {
-      console.log("Choisissez votre combattant :");
-      this.characters.forEach((character, index) => {
-        console.log(`${index + 1}. ${character.name} (${character.constructor.name})`);
-      });
-  
-      let choice;
-      do {
-        choice = prompt("Entrez le numéro de votre combattant :");
-        choice = parseInt(choice, 10) - 1;
-      } while (isNaN(choice) || choice < 0 || choice >= this.characters.length);
-  
-      this.playerCharacter = this.characters[choice];
-      console.log(`Vous avez choisi ${this.playerCharacter.name}.`);
+
+    // Méthode pour extraire le personnage de l'URL
+    getCharacterFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const characterName = urlParams.get('character');
+        return this.characters.find(character => character.name.includes(characterName));
     }
-  
-    // Afficher les statistiques des joueurs en jeu
+
+    // Méthode pour afficher les statistiques des joueurs en jeu
     displayStats() {
-      console.log("Statistiques des joueurs en jeu :");
-      this.characters.filter(character => character.status === 'playing').forEach(character => {
-        console.log(`${character.name} (${character.constructor.name}): HP: ${character.hp}, DMG: ${character.dmg}, MANA: ${character.mana}, STATUS: ${character.status}`);
-      });
+        console.log("Statistiques des joueurs en jeu :");
+        this.characters.filter(character => character.status === 'playing').forEach(character => {
+            console.log(`${character.name} (${character.constructor.name}): HP: ${character.hp}, DMG: ${character.dmg}, MANA: ${character.mana}, STATUS: ${character.status}`);
+        });
     }
-  
     // Skip turn method
     skipTurn() {
       this.turnLeft -= 1;
@@ -354,23 +343,20 @@ class Character {
       console.log("La partie est terminée.");
     }
   
-    // Start game method
-    startGame() {
-      this.chooseCharacter(); // Permet au joueur de choisir son personnage
-      while (this.turnLeft > 0) {
-        this.startTurn();
-      }
-    }
+    
   }
-  
-  // Step 4: Start the game ################################################################
-  const gameInstance = new Game();
-  
+
+  // Start game method
   document.addEventListener('DOMContentLoaded', function() {
-    const startGameBtn = document.getElementById('start-game-btn');
-    startGameBtn.addEventListener('click', function() {
-        // Utilisez l'instance de Game pour démarrer le jeu
-        gameInstance.startGame();
-    });
-  });
+    const gameInstance = new Game(); // Créez l'instance ici, après que toutes les classes soient définies
   
+    const startGameBtn = document.getElementById('start-game-btn');
+    if (startGameBtn) {
+      startGameBtn.addEventListener('click', function() {
+        gameInstance.startGame(); // Assurez-vous que la méthode startGame est définie dans Game
+      });
+    } else {
+      // Si le bouton de démarrage du jeu n'est pas trouvé, le jeu démarre automatiquement
+      gameInstance.startGame();
+    }
+  });
