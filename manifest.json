@@ -1,0 +1,14 @@
+{
+    "name": "Hello World",
+    "short_name": "Hello",
+    "icons": [{        
+          "src": "images/raym.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        }],
+    "lang": "fr",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "white",
+    "theme_color": "white"
+  }
